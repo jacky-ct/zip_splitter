@@ -5,8 +5,9 @@ mod utils;
 // - Check for presence of .zip [✅]
 //      - Warn user if no .zip [✅]
 //
-// - Ask for desired zip file name root []
-// - Ask for maximum zip size (support GB, MB) []
+// - Ask for desired zip file name root [✅]
+// - Ask for maximum zip size (support GB, MB) [✅]
+// - Calculate maximum size from input []
 //
 // - Unzip []
 //
