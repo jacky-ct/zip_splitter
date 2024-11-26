@@ -46,12 +46,13 @@ fn main() -> () {
     let has_zip: bool = zip_in_dir("./").expect("Error when reading directory -- maybe run with admin privileges");
 
     if !has_zip {
-        print!("No .zip found in this folder, press ENTER to quit");
+        println!("No .zip found in this folder, press ENTER to quit");
         let mut read_line = String::new();
         io::stdout().flush().unwrap();
         io::stdin().read_line(&mut read_line).expect("Failed to read line");
         std::process::exit(0);
     }
 
-    print!("Success");
+    println!("Enter max .zip size (or ENTER for default of 10GB): ")
+
 }
