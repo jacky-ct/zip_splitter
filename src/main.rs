@@ -7,7 +7,7 @@ use std::ffi::OsStr;
 //      General structure
 //
 // - Check for presence of .zip [✅]
-//      - Warn user if no .zip []
+//      - Warn user if no .zip [✅]
 //
 // - Ask for desired zip file name root []
 // - Ask for maximum zip size (support GB, MB) []
@@ -45,6 +45,13 @@ fn main() -> () {
 
     let has_zip: bool = zip_in_dir("./").expect("Error when reading directory -- maybe run with admin privileges");
 
-    print!("{}", has_zip);
-    io::stdout().flush().unwrap();
+    if !has_zip {
+        print!("No .zip found in this folder, press ENTER to quit");
+        let mut read_line = String::new();
+        io::stdout().flush().unwrap();
+        io::stdin().read_line(&mut read_line).expect("Failed to read line");
+        std::process::exit(0);
+    }
+
+    print!("Success");
 }
