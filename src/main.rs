@@ -1,8 +1,4 @@
-use std::fs;
-use std::error::Error as Error;
-use std::io::Write;
-use std::io;
-use std::ffi::OsStr;
+mod utils;
 
 //      General structure
 //
@@ -32,27 +28,14 @@ use std::ffi::OsStr;
 
 fn main() -> () {
 
-    fn zip_in_dir(dir: &str) -> Result<bool, Box<dyn Error>> {
-        Ok(fs::read_dir(dir)?
-            .filter_map(|res| res.ok())
-            .map(|dir| dir.path())
-            .map(|path| path.extension()
-                .unwrap_or(OsStr::new(""))
-                .to_str()
-                .unwrap_or("") == "zip")
-            .any(|x| x))
-    }
-
-    let has_zip: bool = zip_in_dir("./").expect("Error when reading directory -- maybe run with admin privileges");
+    let has_zip: bool = utils::zip_in_dir("./").expect("Error when reading directory -- maybe run with admin privileges");
 
     if !has_zip {
-        println!("No .zip found in this folder, press ENTER to quit");
-        let mut read_line = String::new();
-        io::stdout().flush().unwrap();
-        io::stdin().read_line(&mut read_line).expect("Failed to read line");
+        utils::print_and_get_input("No .zip found in this folder, press ENTER to quit");
         std::process::exit(0);
     }
 
-    println!("Enter max .zip size (or ENTER for default of 10GB): ")
+    let archive_name: String = utils::print_and_get_input("Enter name for generated .zip (or ENTER for default \"archive\": ");
+    let max_size: String = utils::print_and_get_input("Enter max .zip size (or ENTER for default of 10GB): ");
 
 }
