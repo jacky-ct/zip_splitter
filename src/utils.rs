@@ -5,6 +5,13 @@ use std::io::Write;
 use std::io;
 use filesize::PathExt;
 
+#[derive(PartialEq, Eq, PartialOrd, Ord, Debug)]
+pub struct File {
+    pub size: u64,
+    pub path: String,
+    pub archived: bool
+}
+
 pub fn zip_in_dir(dir: &str) -> Result<bool, Box<dyn Error>> {
     Ok(fs::read_dir(dir)?
         .filter_map(|res| res.ok())
@@ -25,12 +32,15 @@ pub fn print_and_get_input(msg: &str) -> String {
     input
 }
 
-pub fn get_file_sizes_in_dir(dir: &str) -> Result<Vec<(u64, String)>, Box<dyn Error>> {
+pub fn get_file_sizes_in_dir(dir: &str) -> Result<Vec<File>, Box<dyn Error>> {
     Ok(
         fs::read_dir(dir)?
         .filter_map(|res| res.ok())
         .map(|dir| dir.path())
-        .map(|path| (path.size_on_disk().expect("Error reading file size"), String::from(path.to_str().unwrap())))
+        .map(|path| File {
+            size: path.size_on_disk().expect("Error reading file size"),
+            path: String::from(path.to_str().unwrap()),
+            archived: false })
         .collect()
     )
 }
