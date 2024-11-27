@@ -36,7 +36,7 @@ fn main() -> () {
         std::process::exit(0);
     }
 
-    let archive_name: String = utils::print_and_get_input("Enter name for generated .zip (or ENTER for default \"archive\": ");
+    let archive_name: String = utils::print_and_get_input("Enter name for generated .zip (or ENTER for default \"archive\": ").trim().to_string();
     let max_size: String = utils::print_and_get_input("Enter max .zip size (or ENTER for default of 10GB): ");
 
 }
