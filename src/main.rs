@@ -1,3 +1,5 @@
+use utils::File;
+
 mod utils;
 
 //      General structure
@@ -38,5 +40,10 @@ fn main() -> () {
 
     let archive_name: String = utils::print_and_get_input("Enter name for generated .zip (or ENTER for default \"archive\": ").trim().to_string();
     let max_size: String = utils::print_and_get_input("Enter max .zip size (or ENTER for default of 10GB): ");
+
+    let mut files: Vec<File> = utils::get_file_sizes_in_dir("./").unwrap();
+    let mut sorted_files: Vec<File> = files.sort_by_key(|file| file.size);
+
+    print!("{:?}", files);
 
 }
