@@ -9,7 +9,7 @@ mod utils;
 //
 // - Ask for desired zip file name root [✅]
 // - Ask for maximum zip size (support GB, MB) [✅]
-// - Calculate maximum size from input []
+// - Calculate maximum size from input [✅]
 //
 // - Unzip []
 //
@@ -44,11 +44,24 @@ fn main() -> () {
     }
 
     let archive_name: String = utils::print_and_get_input("Enter name for generated .zip (or ENTER for default \"archive\": ").trim().to_string();
-    let max_size: String = utils::print_and_get_input("Enter max .zip size (or ENTER for default of 10GB): ");
-
     let mut files: Vec<File> = utils::get_file_sizes_in_dir("./").unwrap();
-    let mut sorted_files: Vec<File> = files.sort_by_key(|file| file.size);
+    files.sort_by_key(|file| file.size);
 
-    print!("{:?}", files);
+    let mut max_size: u64 = 0;
+    {
+        let mut input_msg = "Enter max .zip size (or ENTER for default of 10GB): ";
+        loop {
+            let max_size_input: String = utils::print_and_get_input(input_msg);
 
+            match utils::max_file_size_from_input(max_size_input.as_str()) {
+                Ok(size) => {
+                    max_size = size;
+                    break;
+                    },
+                Err(_) => input_msg = "Invalid input, make sure it is a number followed by suffix (e.g. 54MB): "
+            }
+        }
+    }
+
+    print!("{:?}", max_size);
 }
