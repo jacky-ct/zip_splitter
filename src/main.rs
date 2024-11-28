@@ -28,6 +28,11 @@ mod utils;
 //                 - add current file path to current archive
 //                 - add current file size to current archive size
 //          - Add current archive to archive-list
+//
+//      Optional stuff
+// - Add CLI argument support []
+// - Possible to check size of internal files without unzipping?
+//      - largest file < max size check without unzipping []
 
 fn main() -> () {
 
