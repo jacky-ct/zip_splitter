@@ -1,4 +1,5 @@
 use utils::File;
+use std::path::PathBuf;
 
 mod utils;
 
@@ -36,10 +37,10 @@ mod utils;
 
 fn main() -> () {
 
-    let has_zip: bool = utils::zip_in_dir("./").expect("Error when reading directory -- maybe run with admin privileges");
+    let possible_zip: Option<PathBuf> = utils::get_zip_in_dir("./");
 
-    if !has_zip {
-        utils::print_and_get_input("No .zip found in this folder, press ENTER to quit");
+    if possible_zip.is_none() {
+        utils::print_and_get_input("Error getting .zip in current directory -- make sure .zip is present and/or run with admin privileges");
         std::process::exit(0);
     }
 
@@ -53,7 +54,7 @@ fn main() -> () {
         loop {
             let max_size_input: String = utils::print_and_get_input(input_msg);
 
-            match utils::max_file_size_from_input(max_size_input.as_str()) {
+            match utils::max_file_size_from_input(&max_size_input) {
                 Ok(size) => {
                     max_size = size;
                     break;
@@ -63,5 +64,5 @@ fn main() -> () {
         }
     }
 
-    print!("{:?}", max_size);
+    print!("{:?}, {:?}", max_size, possible_zip.unwrap());
 }
