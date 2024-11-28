@@ -4,6 +4,7 @@ use std::ffi::OsStr;
 use std::io::Write;
 use std::io;
 use filesize::PathExt;
+use std::str::FromStr as from_str;
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct File {
@@ -43,4 +44,20 @@ pub fn get_file_sizes_in_dir(dir: &str) -> Result<Vec<File>, Box<dyn Error>> {
             archived: false })
         .collect()
     )
+}
+
+pub fn max_file_size_from_input(input: &str) -> Result<u64, Box<dyn Error>> {
+    if input == "" {return Ok(10_737_418_240)}
+
+    let len = input.chars().count();
+
+    let size = u64::from_str(&input[..len-3])?;
+    let unit = &input[len-3..];
+
+    match unit.to_lowercase().trim() {
+        "kb" => return Ok(size * 1024),
+        "mb" => return Ok(size * 1_048_576),
+        "gb" => return Ok(size * 1_073_741_824),
+        e => return Err(format!("Invalid suffix (KB, MB, GB only), provided {}", e).into())
+    }
 }
